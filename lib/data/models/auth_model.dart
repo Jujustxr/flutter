@@ -1,5 +1,4 @@
 // lib/data/models/auth_model.dart
-
 class AuthModel {
   final int id;
   final String username;

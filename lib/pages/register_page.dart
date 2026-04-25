@@ -1,5 +1,4 @@
 // lib/pages/register_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/auth/auth_bloc.dart';
@@ -87,13 +86,11 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // ── Header langsung tanpa SizedBox wrapper ──
                       FadeTransition(
                         opacity: _fadeAnimation,
                         child: _buildHeader(context),
                       ),
 
-                      // ── Card ──
                       SlideTransition(
                         position: _slideAnimation,
                         child: FadeTransition(

@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => AuthBloc(),
       child: MaterialApp(
-        title: 'Employee Portal',
+        title: 'Profile Portal',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.dark,
