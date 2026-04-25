@@ -1,32 +1,22 @@
-import 'package:equatable/equatable.dart';
+// lib/bloc/auth/auth_state.dart
 
-abstract class AuthState extends Equatable {
-  const AuthState();
+part of 'auth_bloc.dart';
 
-  @override
-  List<Object> get props => [];
-}
+abstract class AuthState {}
 
-// State awal
 class AuthInitial extends AuthState {}
 
-// Lagi loading (nunggu response API)
 class AuthLoading extends AuthState {}
 
-// Login/Register berhasil
 class AuthSuccess extends AuthState {
   final String message;
-  const AuthSuccess({required this.message});
+  final dynamic data;
 
-  @override
-  List<Object> get props => [message];
+  AuthSuccess({required this.message, this.data});
 }
 
-// Login/Register gagal
 class AuthFailure extends AuthState {
   final String error;
-  const AuthFailure({required this.error});
 
-  @override
-  List<Object> get props => [error];
+  AuthFailure(this.error);
 }

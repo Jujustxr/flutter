@@ -1,4 +1,9 @@
+// lib/pages/profile_page.dart
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/auth/auth_bloc.dart';
+import '../pages/login_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -7,10 +12,6 @@ class ProfilePage extends StatelessWidget {
   static const Color maroonDark = Color(0xFF3d0a10);
   static const Color maroonAccent = Color(0xFFc0392b);
   static const Color bgDark = Color(0xFF0d0d0d);
-  static const Color bgCard = Color(0xFF181818);
-  static const Color bgCardBorder = Color(0xFF2a2a2a);
-  static const Color textPrimary = Color(0xFFe0e0e0);
-  static const Color textMuted = Color(0xFF666666);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +19,7 @@ class ProfilePage extends StatelessWidget {
       backgroundColor: bgDark,
       body: Column(
         children: [
+          // ── Header ──
           Container(
             color: maroon,
             child: SafeArea(
@@ -26,78 +28,18 @@ class ProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 child: Row(
                   children: [
-                    GestureDetector(
-                      onTap: () => Navigator.maybePop(context),
-                      child: Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.12),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.arrow_back_ios_new,
-                            color: Colors.white, size: 16),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
                     const Text(
                       'Profil Saya',
                       style: TextStyle(
-                        fontFamily: 'serif',
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
                       ),
                     ),
                     const Spacer(),
-                    // ── Tombol Logout ──
+                    // Tombol Logout
                     GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            backgroundColor: const Color(0xFF181818),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              side: const BorderSide(color: Color(0xFF2a2a2a)),
-                            ),
-                            title: const Text(
-                              'Keluar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            content: const Text(
-                              'Apakah kamu yakin ingin keluar?',
-                              style: TextStyle(color: Color(0xFF999999)),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(ctx),
-                                child: const Text(
-                                  'Batal',
-                                  style: TextStyle(color: Color(0xFF999999)),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(ctx);
-                                  // TODO: tambahkan logika logout di sini
-                                  // Contoh: context.read<AuthBloc>().add(LogoutEvent());
-                                },
-                                child: const Text(
-                                  'Keluar',
-                                  style: TextStyle(
-                                    color: Color(0xFFc0392b),
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                      onTap: () => _showLogoutDialog(context),
                       child: Container(
                         width: 36,
                         height: 36,
@@ -105,8 +47,7 @@ class ProfilePage extends StatelessWidget {
                           color: Colors.white.withOpacity(0.12),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.logout,
-                            color: Colors.white, size: 18),
+                        child: const Icon(Icons.logout, color: Colors.white, size: 18),
                       ),
                     ),
                   ],
@@ -114,10 +55,13 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
           ),
+
+          // ── Body ──
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  // Avatar section
                   Container(
                     width: double.infinity,
                     decoration: const BoxDecoration(
@@ -172,13 +116,11 @@ class ProfilePage extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
                           decoration: BoxDecoration(
                             color: maroonAccent.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                                color: maroonAccent.withOpacity(0.5)),
+                            border: Border.all(color: maroonAccent.withOpacity(0.5)),
                           ),
                           child: const Text(
                             'Mahasiswa • 19 Tahun',
@@ -192,14 +134,16 @@ class ProfilePage extends StatelessWidget {
                       ],
                     ),
                   ),
+
+                  // Info section
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _SectionLabel(label: 'Informasi Pribadi'),
+                        const _SectionLabel(label: 'Informasi Pribadi'),
                         const SizedBox(height: 8),
-                        _InfoCard(
+                        const _InfoCard(
                           rows: [
                             _InfoRowData(
                               icon: Icons.person_outline,
@@ -214,9 +158,9 @@ class ProfilePage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        _SectionLabel(label: 'Kontak'),
+                        const _SectionLabel(label: 'Kontak'),
                         const SizedBox(height: 8),
-                        _InfoCard(
+                        const _InfoCard(
                           rows: [
                             _InfoRowData(
                               icon: Icons.email_outlined,
@@ -230,32 +174,6 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.edit_outlined,
-                                size: 16, color: Colors.white),
-                            label: const Text(
-                              'Edit Profil',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: maroon,
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              elevation: 0,
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -267,8 +185,51 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF181818),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: Color(0xFF2a2a2a)),
+        ),
+        title: const Text(
+          'Keluar',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+        ),
+        content: const Text(
+          'Apakah kamu yakin ingin keluar?',
+          style: TextStyle(color: Color(0xFF999999)),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Batal', style: TextStyle(color: Color(0xFF999999))),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              context.read<AuthBloc>().add(AuthReset());
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginPage()),
+                    (route) => false,
+              );
+            },
+            child: const Text(
+              'Keluar',
+              style: TextStyle(color: Color(0xFFc0392b), fontWeight: FontWeight.w700),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
+// ── Section Label ──
 class _SectionLabel extends StatelessWidget {
   final String label;
   const _SectionLabel({required this.label});
@@ -290,14 +251,15 @@ class _SectionLabel extends StatelessWidget {
   }
 }
 
+// ── Info Row Data ──
 class _InfoRowData {
   final IconData icon;
   final String label;
   final String value;
-  const _InfoRowData(
-      {required this.icon, required this.label, required this.value});
+  const _InfoRowData({required this.icon, required this.label, required this.value});
 }
 
+// ── Info Card ──
 class _InfoCard extends StatelessWidget {
   final List<_InfoRowData> rows;
   const _InfoCard({required this.rows});
@@ -317,8 +279,7 @@ class _InfoCard extends StatelessWidget {
           return Column(
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
                 child: Row(
                   children: [
                     Container(
@@ -328,8 +289,7 @@ class _InfoCard extends StatelessWidget {
                         color: const Color(0xFF6B0F1A).withOpacity(0.25),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Icon(row.icon,
-                          color: const Color(0xFFc0392b), size: 18),
+                      child: Icon(row.icon, color: const Color(0xFFc0392b), size: 18),
                     ),
                     const SizedBox(width: 14),
                     Column(
@@ -358,11 +318,7 @@ class _InfoCard extends StatelessWidget {
                 ),
               ),
               if (i < rows.length - 1)
-                const Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: Color(0xFF222222),
-                ),
+                const Divider(height: 1, thickness: 1, color: Color(0xFF222222)),
             ],
           );
         }).toList(),
